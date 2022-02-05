@@ -1,9 +1,7 @@
-import { Contract, ContractFactory } from "@ethersproject/contracts";
+import { Token, Token__factory } from "@/typechain-types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import type { Token } from "../typechain-types";
-import { Token__factory } from "../typechain-types/factories/Token__factory";
 
 describe("Token", function () {
   let token: Token,
@@ -15,7 +13,6 @@ describe("Token", function () {
 
   beforeEach(async () => {
     [owner, account1, account2, account3, ...rest] = await ethers.getSigners();
-
     token = await new Token__factory(owner).deploy(
       "Test Token S",
       "TTS",

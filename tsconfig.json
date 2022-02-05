@@ -6,14 +6,11 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "declaration": true,
-    // "baseUrl": ".",
-    // "paths": {        
-    //   "typechain/*": ["typechain/*"],
-    //   "test/*": ["test/*"],
-    //   "scripts/*": ["scripts/*"],
-    //   "contracts/*": ["contracts/*"],
-    //  },
+    "baseUrl": "./",
+    "paths": {        
+      "@/*": ["./*"],
+     },
   },
-  "include": ["./scripts", "./test", "./typechain"],
+  "include": ["./scripts", "./test", "./typechain-types"],
   "files": ["./hardhat.config.ts"]
 }
