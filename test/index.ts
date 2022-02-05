@@ -6,8 +6,7 @@ import type { Token } from "../typechain-types";
 import { Token__factory } from "../typechain-types/factories/Token__factory";
 
 describe("Token", function () {
-  let Token: Token__factory,
-    token: Token,
+  let token: Token,
     owner: SignerWithAddress,
     account1: SignerWithAddress,
     account2: SignerWithAddress,
@@ -15,10 +14,14 @@ describe("Token", function () {
     rest;
 
   beforeEach(async () => {
-    Token = (await ethers.getContractFactory("Token")) as Token__factory;
-
-    token = await Token.deploy("Test Token S", "TTS", 18, 1_000_000);
     [owner, account1, account2, account3, ...rest] = await ethers.getSigners();
+
+    token = await new Token__factory(owner).deploy(
+      "Test Token S",
+      "TTS",
+      18,
+      1_000_000
+    );
   });
 
   describe("Name | Symbol", () => {
