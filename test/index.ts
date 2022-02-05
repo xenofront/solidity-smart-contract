@@ -2,10 +2,12 @@ import { Contract, ContractFactory } from "@ethersproject/contracts";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import type { Token } from "../typechain-types";
+import { Token__factory } from "../typechain-types/factories/Token__factory";
 
 describe("Token", function () {
-  let Token: ContractFactory,
-    token: Contract,
+  let Token: Token__factory,
+    token: Token,
     owner: SignerWithAddress,
     account1: SignerWithAddress,
     account2: SignerWithAddress,
@@ -13,7 +15,13 @@ describe("Token", function () {
     rest;
 
   beforeEach(async () => {
-    Token = await ethers.getContractFactory("Token");
+    const signers = await ethers.getSigners();
+
+    Token = (await ethers.getContractFactory(
+      "Token",
+      signers[0]
+    )) as Token__factory;
+
     token = await Token.deploy("Test Token S", "TTS", 18, 1_000_000);
     [owner, account1, account2, account3, ...rest] = await ethers.getSigners();
   });
@@ -47,10 +55,10 @@ describe("Token", function () {
 
       const receipt = await result.wait();
       expect(receipt.logs.length).to.equal(1, "triggers one event");
-      expect(receipt.events[0].event).to.equal("Transfer");
-      expect(receipt.events[0].args._from).to.equal(owner.address);
-      expect(receipt.events[0].args._to).to.equal(account1.address);
-      expect(receipt.events[0].args._amount).to.equal(1_000);
+      expect(receipt.events![0].event).to.equal("Transfer");
+      expect(receipt.events![0].args!._from).to.equal(owner.address);
+      expect(receipt.events![0].args!._to).to.equal(account1.address);
+      expect(receipt.events![0].args!._amount).to.equal(1_000);
     });
     it("Transfer return 'true'", async () => {
       const success = await token.callStatic.transfer(account1.address, 1_000);
@@ -66,10 +74,10 @@ describe("Token", function () {
       const receipt = await result.wait();
 
       expect(receipt.logs.length).to.equal(1);
-      expect(receipt.events[0].event).to.equal("Approval");
-      expect(receipt.events[0].args._owner).to.equal(owner.address);
-      expect(receipt.events[0].args._spender).to.equal(account1.address);
-      expect(receipt.events[0].args._amount).to.equal(2_000);
+      expect(receipt.events![0].event).to.equal("Approval");
+      expect(receipt.events![0].args!._owner).to.equal(owner.address);
+      expect(receipt.events![0].args!._spender).to.equal(account1.address);
+      expect(receipt.events![0].args!._amount).to.equal(2_000);
 
       const allowance = await token.allowance(owner.address, account1.address);
       expect(allowance).to.equal(2_000);
