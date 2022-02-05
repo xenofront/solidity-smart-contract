@@ -15,12 +15,7 @@ describe("Token", function () {
     rest;
 
   beforeEach(async () => {
-    const signers = await ethers.getSigners();
-
-    Token = (await ethers.getContractFactory(
-      "Token",
-      signers[0]
-    )) as Token__factory;
+    Token = (await ethers.getContractFactory("Token")) as Token__factory;
 
     token = await Token.deploy("Test Token S", "TTS", 18, 1_000_000);
     [owner, account1, account2, account3, ...rest] = await ethers.getSigners();
